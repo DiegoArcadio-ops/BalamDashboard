@@ -21,19 +21,44 @@ export default function ChatPage() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [mensajes, cargando])
 
-  const enviarMensaje = async () => {
+ const enviarMensaje = async () => {
     if (!input.trim()) return
     const nuevosMensajes = [...mensajes, { rol: 'cliente', texto: input }]
     setMensajes(nuevosMensajes)
     setInput('')
     setCargando(true)
-    setTimeout(() => {
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mensaje: input,
+          historial: nuevosMensajes
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.ok) {
+        setMensajes(prev => [...prev, {
+          rol: 'agente',
+          texto: data.respuesta
+        }])
+      } else {
+        setMensajes(prev => [...prev, {
+          rol: 'agente',
+          texto: '❌ Hubo un problema al contactar al agente. Intenta de nuevo.'
+        }])
+      }
+    } catch (error) {
       setMensajes(prev => [...prev, {
         rol: 'agente',
-        texto: 'Entendido. ¿Tienes alguna preferencia de tecnología o ya tienes algo iniciado? ¿Cuál es el plazo que manejas?'
+        texto: '❌ Error de conexión. Por favor intenta de nuevo.'
       }])
+    } finally {
       setCargando(false)
-    }, 1500)
+    }
   }
 
   const generarResumen = () => {

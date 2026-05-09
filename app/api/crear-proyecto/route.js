@@ -12,13 +12,15 @@ Agentes sugeridos: ${resumen.agentes.join(', ')}
     `.trim()
 
     const response = await fetch(
-      `http://127.0.0.1:40976/api/companies/${process.env.PAPERCLIP_COMPANY_ID}/issues`,
+      `${process.env.PAPERCLIP_URL}/api/companies/${process.env.PAPERCLIP_COMPANY_ID}/issues`,
       {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cookie': `better-auth.session_token=${process.env.PAPERCLIP_SESSION_TOKEN}`,
-        },
+       headers: {
+  'Content-Type': 'application/json',
+  'Cookie': `better-auth.session_token=${TOKEN}`,
+  'Origin': 'http://177.7.54.213:40976',
+  'Referer': 'http://177.7.54.213:40976/BAL/dashboard',
+},
         body: JSON.stringify({
           title: resumen.proyecto,
           description: descripcion,
