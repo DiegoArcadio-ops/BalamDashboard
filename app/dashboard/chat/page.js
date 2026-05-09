@@ -45,32 +45,23 @@ export default function ChatPage() {
     })
   }
 
- const confirmarProyecto = async () => {
+  const confirmarProyecto = async () => {
     setCargando(true)
     try {
-      const response = await fetch(
-        'http://177.7.54.213:40976/api/companies/c6387433-c642-46e0-8b38-27d2cfe3b263/issues',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({
-            title: resumen.proyecto,
-            description: `Proyecto solicitado por cliente via dashboard.\n\nTecnologías: ${resumen.tecnologias}\nPlazo: ${resumen.plazo}\nAgentes: ${resumen.agentes.join(', ')}`,
-            assigneeAgentId: 'a7b4333b-090c-4d43-8400-a88606e89e7d',
-            priority: 'high',
-          }),
-        }
-      )
+      const response = await fetch('/api/crear-proyecto', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resumen }),
+      })
 
       const data = await response.json()
 
-      if (response.ok) {
+      if (data.ok) {
         setConfirmado(true)
         setResumen(null)
         setMensajes(prev => [...prev, {
           rol: 'agente',
-          texto: `✅ ¡Perfecto! Tu proyecto fue enviado al CEO (${data.identifier}). El equipo comenzará a trabajar en breve.`
+          texto: `✅ ¡Perfecto! Tu proyecto fue enviado al CEO (${data.issueId}). El equipo comenzará a trabajar en breve.`
         }])
       } else {
         setMensajes(prev => [...prev, {
@@ -87,6 +78,7 @@ export default function ChatPage() {
       setCargando(false)
     }
   }
+
   return (
     <div className="min-h-screen text-white flex" style={{background: 'linear-gradient(135deg, #0a0a0f 0%, #0d1117 50%, #0a0f1a 100%)'}}>
 

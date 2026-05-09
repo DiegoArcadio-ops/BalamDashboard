@@ -1,29 +1,26 @@
 export async function POST(request) {
   try {
-    const { resumen, sessionToken } = await request.json()
+    const { resumen } = await request.json()
 
-    const titulo = resumen.proyecto
     const descripcion = `
 Proyecto solicitado por cliente via dashboard.
 
-**Descripción del proyecto:** ${resumen.proyecto}
-**Tecnologías:** ${resumen.tecnologias}
-**Plazo estimado:** ${resumen.plazo}
-**Agentes sugeridos:** ${resumen.agentes.join(', ')}
-
-Por favor coordinar con el equipo para iniciar el desarrollo.
+Descripción: ${resumen.proyecto}
+Tecnologías: ${resumen.tecnologias}
+Plazo estimado: ${resumen.plazo}
+Agentes sugeridos: ${resumen.agentes.join(', ')}
     `.trim()
 
     const response = await fetch(
-      `${process.env.PAPERCLIP_URL}/api/companies/${process.env.PAPERCLIP_COMPANY_ID}/issues`,
+      `http://127.0.0.1:40976/api/companies/${process.env.PAPERCLIP_COMPANY_ID}/issues`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': `better-auth.session_token=${sessionToken}`,
+          'Cookie': `better-auth.session_token=${process.env.PAPERCLIP_SESSION_TOKEN}`,
         },
         body: JSON.stringify({
-          title: titulo,
+          title: resumen.proyecto,
           description: descripcion,
           assigneeAgentId: process.env.PAPERCLIP_CEO_AGENT_ID,
           priority: 'high',
@@ -32,13 +29,13 @@ Por favor coordinar con el equipo para iniciar el desarrollo.
     )
 
     const data = await response.json()
-    console.log('Respuesta Paperclip:', response.status, data)
+    console.log('Paperclip response:', response.status, data)
 
     if (!response.ok) {
-      return Response.json({ error: 'Error al crear el proyecto', detalle: data }, { status: 500 })
+      return Response.json({ error: 'Error Paperclip', detalle: data }, { status: 500 })
     }
 
-    return Response.json({ ok: true, issueId: data.id })
+    return Response.json({ ok: true, issueId: data.identifier })
 
   } catch (error) {
     console.error('Error:', error)
