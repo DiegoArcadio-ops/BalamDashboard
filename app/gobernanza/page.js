@@ -214,6 +214,21 @@ export default function GobernanzaPage() {
             </div>
           </div>
         </div>
+        {/* QR Code */}
+        <div className="mb-10 rounded-2xl p-8 text-center" style={{background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)'}}>
+          <h3 className="text-xl font-bold text-white mb-2">📱 Comparte este documento</h3>
+          <p className="text-sm mb-6" style={{color: 'rgba(255,255,255,0.35)'}}>Escanea el código QR para acceder a esta página desde tu dispositivo móvil</p>
+          <div className="flex justify-center mb-4">
+            <img
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=http://177.7.54.213:3000/gobernanza&bgcolor=0d1117&color=ffffff&qzone=2`}
+              alt="QR Code Gobernanza Balam"
+              className="rounded-xl"
+              width={200}
+              height={200}
+            />
+          </div>
+          <p className="text-xs" style={{color: 'rgba(255,255,255,0.25)'}}>http://177.7.54.213:3000/gobernanza</p>
+        </div>
 
         {/* Footer */}
         <div className="text-center mt-16 py-8 border-t" style={{borderColor: 'rgba(255,255,255,0.06)'}}>
