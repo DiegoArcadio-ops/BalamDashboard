@@ -70,7 +70,6 @@ const generarResumen = () => {
       proyecto: ultimoMensajeCliente ? ultimoMensajeCliente.texto.slice(0, 60) : 'Proyecto del cliente',
       tecnologias: 'HTML + CSS + JavaScript',
       plazo: '1-2 días',
-      agentes: ['CEO', 'Desarrollador de Software', 'Documentador técnico']
     })
   }
 
