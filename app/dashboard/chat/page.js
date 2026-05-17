@@ -61,12 +61,16 @@ export default function ChatPage() {
     }
   }
 
-  const generarResumen = () => {
+const generarResumen = () => {
+    const ultimoMensajeCliente = mensajes
+      .filter(m => m.rol === 'cliente')
+      .pop()
+
     setResumen({
-      proyecto: 'Sistema de gestión de clientes',
-      tecnologias: 'React + Node.js + PostgreSQL',
-      plazo: '4 semanas',
-      agentes: ['Desarrollador de Software', 'Documentador técnico', 'QA']
+      proyecto: ultimoMensajeCliente ? ultimoMensajeCliente.texto.slice(0, 60) : 'Proyecto del cliente',
+      tecnologias: 'HTML + CSS + JavaScript',
+      plazo: '1-2 días',
+      agentes: ['CEO', 'Desarrollador de Software', 'Documentador técnico']
     })
   }
 
